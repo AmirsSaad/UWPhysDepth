@@ -4,7 +4,7 @@ import numpy as np
 import glob
 
 
-namelist = glob.glob(r'./data/D5/*/*.csv')
+namelist = glob.glob(r'./shared/data/D5/*/*.csv')
 data_paths = {
     'rgb' : [name for name in namelist if not 'dep' in name and not 'coord' in name],
     'D'   : [name for name in namelist if 'dep' in name]

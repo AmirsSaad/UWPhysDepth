@@ -5,7 +5,7 @@
 /.vscode
 *.jpg
 *.obj
-data/
+shared/
 *.csv
 *.pyc
 /*/*.pyc
