@@ -5,3 +5,7 @@
 /.vscode
 *.jpg
 *.obj
+data/
+*.csv
+*.pyc
+/*/*.pyc

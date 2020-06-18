@@ -73,7 +73,7 @@ def get_nyu_callbacks(model, basemodel, train_generator, test_generator, test_se
                 logs.update({'log10': e[5]})
 
             super().on_epoch_end(epoch, logs)
-    callbacks.append( LRTensorBoard(log_dir=runPath) )
+    # callbacks.append( LRTensorBoard(log_dir=runPath) )
 
     # Callback: Learning Rate Scheduler
     lr_schedule = keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.7, patience=5, min_lr=0.00009, min_delta=1e-2)

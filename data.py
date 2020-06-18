@@ -17,11 +17,11 @@ def nyu_resize(img, resolution=480, padding=6):
     from skimage.transform import resize
     return resize(img, (resolution, int(resolution*4/3)), preserve_range=True, mode='reflect', anti_aliasing=True )
 
-def get_nyu_data(batch_size, nyu_data_zipfile='Users/oferhazut/GitHub/ProjectB/sea_thru/sandbox/2020_06_11_DepthMaps/D5.zip'):
+def get_nyu_data(batch_size, nyu_data_zipfile=None):
     # data = extract_zip(nyu_data_zipfile)
     data = []
-    nyu2_train = pd.read_csv(r'/Users/oferhazut/GitHub/UWPhysDepth/train_set.csv')
-    nyu2_test = pd.read_csv(r'/Users/oferhazut/GitHub/UWPhysDepth/test_set.csv')
+    nyu2_train = pd.read_csv(r'./train_set.csv')
+    nyu2_test = pd.read_csv(r'./test_set.csv')
 
     shape_rgb = (batch_size, 480, 640, 3)
     shape_depth = (batch_size, 240, 320, 1)

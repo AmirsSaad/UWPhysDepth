@@ -5,7 +5,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '5'
 from loss import depth_loss_function
 from utils import predict, save_images, load_test_data
 from model import create_model
-from data import get_nyu_train_test_data, get_unreal_train_test_data
+from data import get_nyu_train_test_data
 from callbacks import get_nyu_callbacks
 
 from keras.optimizers import Adam
@@ -40,13 +40,15 @@ model = create_model( existing=args.checkpoint )
 
 # Data loaders
 if args.data == 'nyu': train_generator, test_generator = get_nyu_train_test_data( args.bs )
-if args.data == 'unreal': train_generator, test_generator = get_unreal_train_test_data( args.bs )
 
 # Training session details
 runID = str(int(time.time())) + '-n' + str(len(train_generator)) + '-e' + str(args.epochs) + '-bs' + str(args.bs) + '-lr' + str(args.lr) + '-' + args.name
 outputPath = './models/'
 runPath = outputPath + runID
-pathlib.Path(runPath).mkdir(parents=True, exist_ok=True)
+
+if not os.path.exists(runPath):
+    os.makedirs(runPath)
+
 print('Output: ' + runPath)
 
  # (optional steps)
@@ -54,15 +56,15 @@ if True:
     # Keep a copy of this training script and calling arguments
     with open(__file__, 'r') as training_script: training_script_content = training_script.read()
     training_script_content = '#' + str(sys.argv) + '\n' + training_script_content
-    with open(runPath+'/'+__file__, 'w') as training_script: training_script.write(training_script_content)
+    # with open(runPath+'/'+__file__, 'w') as training_script: training_script.write(training_script_content)
 
     # Generate model plot
-    plot_model(model, to_file=runPath+'/model_plot.svg', show_shapes=True, show_layer_names=True)
+    # plot_model(model, to_file=runPath+'/model_plot.svg', show_shapes=True, show_layer_names=True)
 
     # Save model summary to file
-    from contextlib import redirect_stdout
-    with open(runPath+'/model_summary.txt', 'w') as f:
-        with redirect_stdout(f): model.summary()
+    # from contextlib import redirect_stdout
+    # with open(runPath+'/model_summary.txt', 'w') as f:
+    #     with redirect_stdout(f): model.summary()
 
 # Multi-gpu setup:
 basemodel = model
@@ -81,7 +83,7 @@ print('Ready for training!\n')
 # Callbacks
 callbacks = []
 if args.data == 'nyu': callbacks = get_nyu_callbacks(model, basemodel, train_generator, test_generator, load_test_data() if args.full else None , runPath)
-if args.data == 'unreal': callbacks = get_nyu_callbacks(model, basemodel, train_generator, test_generator, load_test_data() if args.full else None , runPath)
+# if args.data == 'unreal': callbacks = get_nyu_callbacks(model, basemodel, train_generator, test_generator, load_test_data() if args.full else None , runPath)
 
 # Start training
 model.fit_generator(train_generator, callbacks=callbacks, validation_data=test_generator, epochs=args.epochs, shuffle=True)

@@ -82,7 +82,7 @@ def save_images(filename, outputs, inputs=None, gt=None, is_colormap=True, is_re
     im.save(filename)
 
 def load_test_data(test_data_zip_file='nyu_test.zip'):
-    print('Loading test data...', end='')
+    print('Loading test data...')
     import numpy as np
     from data import extract_zip
     data = extract_zip(test_data_zip_file)
