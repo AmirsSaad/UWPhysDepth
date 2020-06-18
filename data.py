@@ -17,11 +17,11 @@ def nyu_resize(img, resolution=480, padding=6):
     from skimage.transform import resize
     return resize(img, (resolution, int(resolution*4/3)), preserve_range=True, mode='reflect', anti_aliasing=True )
 
-def get_nyu_data(batch_size, nyu_data_zipfile=r'C:\Users\amirsaa\Desktop\D5.zip'):
+def get_nyu_data(batch_size, nyu_data_zipfile='Users/oferhazut/GitHub/ProjectB/sea_thru/sandbox/2020_06_11_DepthMaps/D5.zip'):
     # data = extract_zip(nyu_data_zipfile)
     data = []
-    nyu2_train = pd.read_csv(r'C:\Users\amirsaa\Documents\GitHub\DenseDepth\train_set.csv')
-    nyu2_test = pd.read_csv(r'C:\Users\amirsaa\Documents\GitHub\DenseDepth\test_set.csv')
+    nyu2_train = pd.read_csv(r'/Users/oferhazut/GitHub/UWPhysDepth/train_set.csv')
+    nyu2_test = pd.read_csv(r'/Users/oferhazut/GitHub/UWPhysDepth/test_set.csv')
 
     shape_rgb = (batch_size, 480, 640, 3)
     shape_depth = (batch_size, 240, 320, 1)
@@ -77,9 +77,6 @@ class NYU_BasicAugmentRGBSequence(Sequence):
             # y = np.clip(np.asarray(Image.open( BytesIO(self.data[sample[1]]) )).reshape(480,640,1)/255*self.maxDepth,0,self.maxDepth)
             # y = DepthNorm(y, maxDepth=self.maxDepth)
 
-            print(x.shape)
-            print(x)
-            print(y.shape)
             batch_x[i] = nyu_resize(x, 480)
             batch_y[i] = nyu_resize(y, 240)
 

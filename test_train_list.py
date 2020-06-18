@@ -22,11 +22,11 @@ import glob
 # test_set.to_csv('test_set.csv',index=False)
 
 
-# input_zip = ZipFile(r'C:\Users\amirsaa\Desktop\D5.zip')
+#input_zip = ZipFile(r'/Users/oferhazut/GitHub/ProjectB/sea_thru/sandbox/2020_06_11_DepthMaps/D5.zip')
 
-namelist = glob.glob(r'C:\Users\amirsaa\Desktop\D5\*\*.csv')
+namelist = glob.glob(r'/Users/oferhazut/GitHub/ProjectB/sea_thru/sandbox/2020_06_11_DepthMaps/D5/*/*.csv')
 data_paths = {
-    'rgb' : [name for name in namelist if not 'dep' in name and not  'coord' in name],
+    'rgb' : [name for name in namelist if not 'dep' in name and not 'coord' in name],
     'D'   : [name for name in namelist if 'dep' in name]
 }
 print(data_paths['rgb'])
