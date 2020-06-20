@@ -2,12 +2,14 @@ from zipfile import ZipFile
 import pandas as pd
 import numpy as np
 import glob
+from zipfile import ZipFile
 
-
-namelist = glob.glob(r'./shared/data/D5/*/*.csv')
+zf = ZipFile(r'./shared/data/D5.zip')
+namelist = zf.namelist()
+#namelist = glob.glob(r'./shared/data/D5/*/*.csv')
 data_paths = {
-    'rgb' : [name for name in namelist if not 'dep' in name and not 'coord' in name],
-    'D'   : [name for name in namelist if 'dep' in name]
+    'rgb' : [name for name in namelist if not 'dep' in name and not 'coord' in name and '.csv' in name],
+    'D'   : [name for name in namelist if 'dep' in name and '.csv' in name]
 }
 print(data_paths['rgb'])
 print(data_paths['D'])
