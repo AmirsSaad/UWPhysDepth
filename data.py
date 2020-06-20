@@ -1,7 +1,7 @@
 import numpy as np
 from utils import DepthNorm
-from io import BytesIO
-from PIL import Image
+#from io import BytesIO
+#from PIL import Image
 from zipfile import ZipFile
 from tensorflow.keras.utils import Sequence
 from augment import BasicPolicy
@@ -11,15 +11,15 @@ import matplotlib.pyplot as plt
 
 def extract_zip(input_zip):
     input_zip=ZipFile(input_zip)
-    return {name: input_zip.read(name) for name in input_zip.namelist()}
+    return {name: pd.read_csv(input_zip.open(name), header=None) for name in input_zip.namelist() if '.csv' in name }
 
 def nyu_resize(img, resolution=480, padding=6):
     from skimage.transform import resize
     return resize(img, (resolution, int(resolution*4/3)), preserve_range=True, mode='reflect', anti_aliasing=True )
 
-def get_nyu_data(batch_size, nyu_data_zipfile=None):
-    # data = extract_zip(nyu_data_zipfile)
-    data = []
+def get_nyu_data(batch_size, nyu_data_zipfile=r'./shared/data/D5.zip'):
+    data = extract_zip(nyu_data_zipfile)
+    # data = []
     nyu2_train = pd.read_csv(r'./train_set.csv')
     nyu2_test = pd.read_csv(r'./test_set.csv')
 
@@ -69,13 +69,11 @@ class NYU_BasicAugmentRGBSequence(Sequence):
             sample = self.dataset.iloc[index]
 
             print(sample['rgb'])
-            x = np.genfromtxt(sample['rgb'],delimiter=',').reshape(480,640,3,order='F')
-            y = np.expand_dims(np.genfromtxt(sample['D'],delimiter=','),axis=2)
-            
-            
-            # x = np.clip(np.asarray(Image.open(  )).reshape(480,640,3)/255,0,1)
-            # y = np.clip(np.asarray(Image.open( BytesIO(self.data[sample[1]]) )).reshape(480,640,1)/255*self.maxDepth,0,self.maxDepth)
-            # y = DepthNorm(y, maxDepth=self.maxDepth)
+            #x = np.genfromtxt(sample['rgb'],delimiter=',').reshape(480,640,3,order='F')
+            #y = np.expand_dims(np.genfromtxt(sample['D'],delimiter=','),axis=2)            
+            x = np.asarray(self.data[sample['rgb']]).reshape(480,640,3,order='F')/255
+            y = np.asarray(self.data[sample['D']]).reshape(480,640,1)
+            y = DepthNorm(y, maxDepth=self.maxDepth)
 
             batch_x[i] = nyu_resize(x, 480)
             batch_y[i] = nyu_resize(y, 240)
