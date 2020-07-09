@@ -3,11 +3,9 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '5'
 
 # Kerasa / TensorFlow
 from loss import depth_loss_function
-from utils import predict, save_images, load_test_data
+from utils import predict, save_images, load_test_data , get_callbacks
 from model import create_model
 from data import get_nyu_train_test_data
-from callbacks import get_nyu_callbacks
-
 from keras.optimizers import Adam
 from keras.utils import multi_gpu_model
 from keras.utils.vis_utils import plot_model
@@ -80,10 +78,7 @@ model.compile(loss=depth_loss_function, optimizer=optimizer)
 
 print('Ready for training!\n')
 
-# Callbacks
-callbacks = []
-if args.data == 'nyu': callbacks = get_nyu_callbacks(model, basemodel, train_generator, test_generator, load_test_data() if args.full else None , runPath)
-# if args.data == 'unreal': callbacks = get_nyu_callbacks(model, basemodel, train_generator, test_generator, load_test_data() if args.full else None , runPath)
+callbacks = get_callbacks(runPath)
 
 # Start training
 model.fit_generator(train_generator, callbacks=callbacks, validation_data=test_generator, epochs=args.epochs, shuffle=True)
