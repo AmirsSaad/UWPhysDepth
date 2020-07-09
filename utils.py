@@ -1,5 +1,6 @@
 import numpy as np
 from PIL import Image
+import keras
 
 def DepthNorm(x, maxDepth):
     return maxDepth / x
@@ -142,3 +143,18 @@ def evaluate(model, rgb, depth, crop, batch_size=6, verbose=False):
         print("{:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}".format(e[0],e[1],e[2],e[3],e[4],e[5]))
 
     return e
+
+
+## Callbacks
+def get_callbacks(runPath):
+    callbacks = []
+
+    # Callback: Learning Rate Scheduler
+    lr_schedule = keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.7, patience=5, min_lr=0.00009, min_delta=1e-2)
+    callbacks.append( lr_schedule ) # reduce learning rate when stuck
+
+    # Callback: save checkpoints
+    callbacks.append(keras.callbacks.ModelCheckpoint(runPath + '/weights.{epoch:02d}-{val_loss:.2f}.hdf5', monitor='val_loss', 
+        verbose=1, save_best_only=False, save_weights_only=False, mode='min', period=5))
+
+    return callbacks
